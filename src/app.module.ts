@@ -5,6 +5,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { UserModule } from './app/user/user.module';
 import { AuthModule } from './app/auth/auth.module';
 import { SearchModule } from './app/search/search.module';
+import { EmailModule } from './app/email/email.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { SearchModule } from './app/search/search.module';
     UserModule,
     AuthModule,
     SearchModule,
+    EmailModule,
   ],
   controllers: [],
   providers: [],
