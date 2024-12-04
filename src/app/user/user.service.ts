@@ -28,6 +28,10 @@ export class UserService {
     }
   }
 
+  async findOneByEmail(email: string): Promise<UserEntity | null> {
+    return this.userRepository.findOne({ where: { email } });
+  }
+
   async store(data: CreateUserDto) {
     const user = this.userRepository.create(data);
     return this.userRepository.save(user);

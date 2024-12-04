@@ -1,35 +1,24 @@
-import { Injectable } from '@nestjs/common';
-import { UserEntity } from 'src/app/user/user.entity';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserService } from 'src/app/user/user.service';
+import { MessagesHelper } from 'src/helpers/messages.helper';
+import { LoginDto } from './login.dto';
 import { compareSync } from 'bcrypt';
-import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly userService: UserService,
-    private readonly jwtService: JwtService,
+    private readonly userService: UserService
   ) {}
 
-  async login(user) {
-    const payload = { sub: user.id, email: user.email };
+  async login(loginDto: LoginDto) {
+    const { email, password } = loginDto;
 
-    return {
-      token: this.jwtService.sign(payload),
-    };
-  }
-
-  async validateUser(email: string, password: string) {
-    let user: UserEntity;
-    try {
-      user = await this.userService.findOneByOrFail({ email });
-    } catch (error) {
-      return null;
+    const user = await this.userService.findOneByEmail(email);
+    if (!user || !compareSync(password, user.password)) {
+      throw new UnauthorizedException(MessagesHelper.PASSWORD_OR_EMAIL_INVALID);
     }
 
-    const isPasswordValid = compareSync(password, user.password);
-    if (!isPasswordValid) return null;
-
-    return user;
+    const { id, firstName } = user;
+    return { id, firstName };
   }
 }
