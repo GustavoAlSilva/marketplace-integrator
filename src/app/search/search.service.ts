@@ -8,7 +8,7 @@ import { UserService } from '../user/user.service';
 import { EmailService } from '../email/email.service';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
-import { Cron, CronExpression } from '@nestjs/schedule';
+import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class SearchService {
@@ -69,7 +69,7 @@ export class SearchService {
     this.searchRepository.softDelete({ id });
   }
 
-  @Cron(CronExpression.EVERY_5_MINUTES)
+  @Cron('*/30 * * * * *')
   async executeSearches(): Promise<void> {
     const activeSearches = await this.searchRepository.find({
       where: { isActive: true },
@@ -113,16 +113,28 @@ export class SearchService {
   }
 
   private formatResults(results: any[]): string {
-    return results
-      .map(
-        (result) => `
-        <div>
-          <h3>${result.title}</h3>
-          <p>Preço: R$${result.price}</p>
-          <p><a href="${result.permalink}" target="_blank">Ver produto</a></p>
-        </div>
-      `,
-      )
-      .join('<hr>');
+    return `
+      <div style="font-family: Arial, sans-serif; color: #004c99; background-color: #dde4eb; padding: 20px;">
+        <h2 style="text-align: center; color: #004c99;">Resultados da Pesquisa</h2>
+        ${results
+          .map(
+            (result) => `
+            <div style="border: 1px solid #004c99; border-radius: 8px; background-color: #fff; margin: 15px 0; padding: 15px;">
+              <h3 style="margin-bottom: 10px; color: #004c99;">${result.title}</h3>
+              <p style="margin: 5px 0; font-size: 16px;">Preço: <strong>R$${result.price.toFixed(
+                2,
+              )}</strong></p>
+              <p style="margin: 5px 0;">
+                <a href="${result.permalink}" target="_blank" style="color: #004c99; text-decoration: none; font-weight: bold;">Ver Produto</a>
+              </p>
+            </div>
+          `,
+          )
+          .join('')}
+        <footer style="text-align: center; margin-top: 20px; font-size: 14px; color: #004c99;">
+          <p>Marketplace Integrator</p>
+        </footer>
+      </div>
+    `;
   }
 }
