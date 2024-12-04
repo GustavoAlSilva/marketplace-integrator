@@ -16,7 +16,7 @@ export class SearchService {
 
   async findAll() {
     return this.searchRepository.find({
-      select: ['id', 'query', 'maxPrice', 'isActive'],
+      select: ['id', 'query', 'minPrice', 'maxPrice', 'isActive'],
     });
   }
 

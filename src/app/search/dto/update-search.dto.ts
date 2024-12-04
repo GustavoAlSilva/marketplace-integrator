@@ -7,6 +7,10 @@ export class UpdateSearchDto {
 
   @IsOptional()
   @IsNumber({ maxDecimalPlaces: 2 })
+  minPrice?: number;
+
+  @IsOptional()
+  @IsNumber({ maxDecimalPlaces: 2 })
   maxPrice?: number;
 
   @IsOptional()

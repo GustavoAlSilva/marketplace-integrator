@@ -22,6 +22,9 @@ export class SearchEntity {
   @Column()
   query: string;
 
+  @Column({ name: 'min_price', type: 'decimal', precision: 10, scale: 2, nullable: true })
+  minPrice: number;
+
   @Column({ name: 'max_price', type: 'decimal', precision: 10, scale: 2, nullable: true })
   maxPrice: number;
 

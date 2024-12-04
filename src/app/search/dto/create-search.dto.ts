@@ -11,6 +11,10 @@ export class CreateSearchDto {
 
   @IsOptional()
   @IsNumber({ maxDecimalPlaces: 2 })
+  minPrice?: number;
+
+  @IsOptional()
+  @IsNumber({ maxDecimalPlaces: 2 })
   maxPrice?: number;
 
   @IsOptional()
